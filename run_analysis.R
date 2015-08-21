@@ -45,7 +45,7 @@ means_sds <- select(full_data, activity, subject, contains("mean"), contains("st
 # read in the activities file into a dataframe, then merge it into the existing 
 #   dataframe
 activities <- read.table('activity_labels.txt')
-names(activities) <- c("activity_number", "activity_name")
+names(activities) <- c("activity_number", "activity")
 names(means_sds)[names(means_sds)=="activity"] <- "activity_number"
 merged <- merge(means_sds, activities, 'activity_number', 'activity_number')
 merged <- select(merged, -activity_number)
@@ -68,8 +68,8 @@ names(merged) <- sub("\\.$", "", names(merged))
 names(merged) <- sub("^t", "time", names(merged))
 names(merged) <- sub("^f", "freq", names(merged))
 names(merged) <- sub("BodyBody", "Body", names(merged))
+names(merged) <- sub("Mag", "Magnitude", names(merged))
 names(merged) <- sub("angle.tBody", "angle.timeBody", names(merged))
-names(merged)[is.na(names(merged))] <- "activity_name"
 
 ####################################################################################
 #
@@ -78,5 +78,5 @@ names(merged)[is.na(names(merged))] <- "activity_name"
 #       
 ####################################################################################
 
-tidy <- merged %>% group_by(subject, activity_name) %>% summarise_each(funs(mean)) 
+tidy <- merged %>% group_by(subject, activity) %>% summarise_each(funs(mean)) 
 write.table(tidy, "tidy.txt", row.names = F)
