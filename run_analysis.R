@@ -44,6 +44,7 @@ activities <- read.table('activity_labels.txt')
 names(activities) <- c("activity_number", "activity_name")
 names(means_sds)[names(means_sds)=="activity"] <- "activity_number"
 merged <- merge(means_sds, activities, 'activity_number', 'activity_number')
+names(merged)[is.na(names(merged))] <- "activity_name"
 
 ####################################################################################
 #
